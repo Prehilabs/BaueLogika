@@ -6,9 +6,9 @@ use problem::Problem;
 
 fn main() 
 {
-    let mut problem = Problem::from_json_file("C:\\Users\\nanib\\Escritorio\\test.json").unwrap();
+    let mut problem = Problem::from_json_file("D:\\Programacion\\BaueLogika\\src\\Test.json").unwrap();
 
-    println!("Problem name: {}", problem.name);
-    println!("Description: {}", problem.description);
+    problem.print_info();
+    problem.set_path_to_exe("C:\\Users\\nanib\\Escritorio\\traza_peano.exe");
     problem.run().unwrap();
 }

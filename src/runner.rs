@@ -13,14 +13,11 @@ pub struct Runner
 
 impl Runner
 {
-    pub fn new(path_to_exe: &str, test_cases: Vec<TestCase>) -> Self {
-        Runner {
-            path_to_exe: String::from(path_to_exe),
-            passed_cases : 0,
-            test_cases: test_cases
-        }
+    pub fn set_path_to_exe(&mut self, path_to_exe: &str)
+    {
+        self.path_to_exe = String::from(path_to_exe);
     }
-
+    
     pub fn print_result(&self)
     {
         println!("Passed {} out of {} test cases", self.passed_cases, self.test_cases.len());

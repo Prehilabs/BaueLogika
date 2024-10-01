@@ -16,16 +16,6 @@ pub struct TestCase
 
 impl TestCase
 {
-    pub fn new(inputs: &str, expected: &str, hidden : bool) -> TestCase {
-        TestCase 
-        { 
-            inputs: String::from(inputs), 
-            expected : String::from(expected),
-            passed : false,
-            hidden : hidden
-        }
-    }
-
     pub fn get_passed(&self) -> bool
     {
         return self.passed;
@@ -33,7 +23,7 @@ impl TestCase
 
     pub fn print_data(&self, test_index : usize)
     {
-        println!("Test case {}", test_index);
+        println!("Test case {}", test_index + 1);
         if !self.hidden
         {
             println!("Inputs: [{}]", self.inputs.replace("\n", ", "));
