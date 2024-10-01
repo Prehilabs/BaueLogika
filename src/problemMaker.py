@@ -48,5 +48,5 @@ if __name__ == "__main__":
     
     if not os.path.exists("problems"):
         os.makedirs("problems")
-    with open(f"problems\\{name}.json", "w") as file:
+    with open(f"problems\\{name.replace(" ", "_")}.json", "w") as file:
         json.dump(problem_json, file, indent=4)
