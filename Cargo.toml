@@ -1,0 +1,6 @@
+[package]
+name = "BaueLogika"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
