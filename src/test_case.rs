@@ -1,7 +1,10 @@
 use std::process::{Child, ChildStdin, ChildStdout};
 use std::io::{Read, Write};
 
+use serde::{Deserialize, Serialize};
 
+
+#[derive(Serialize, Deserialize)]
 pub struct TestCase
 {
     inputs: String,

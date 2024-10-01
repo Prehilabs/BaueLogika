@@ -1,6 +1,9 @@
-use crate::test_case::{TestCase};
-use std::{process::{Child, Command, Stdio}};
+use serde::{Serialize, Deserialize};
 
+use crate::test_case::TestCase;
+use std::process::{Child, Command, Stdio};
+
+#[derive(Serialize, Deserialize)]
 pub struct Runner
 {
     path_to_exe : String,
