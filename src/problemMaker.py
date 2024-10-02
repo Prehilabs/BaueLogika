@@ -7,11 +7,12 @@ if __name__ == "__main__":
     tests_number = int(input("Insert number of tests: "))
     input_number = int(input("Insert input number: "))
     output_number = int(input("Insert output number: "))
+    visible_cases = int(input("Insert number of visible cases: "))
     
     os.system('cls' if os.name == 'nt' else 'clear')
     tests = list()
     for i in range(tests_number):
-        print("Making test number", i+1)
+        print("Making test number", i+1, " [Hidden]" if i >= visible_cases else " [Visible]")
         inputs = ""
         for j in range(input_number):
             inputs += input("Insert input {}: ".format(j + 1)) + "\n"
@@ -23,13 +24,13 @@ if __name__ == "__main__":
         inputs = inputs[:-1]
         outputs = outputs[:-1]
         
-        hidden = input("Will be this test hidden? (y/n)")
+        hidden = i >= visible_cases;
         
         tests.append({
             "inputs": inputs,
             "expected": outputs,
             "passed" : False,
-            "hidden": hidden == "y"
+            "hidden": hidden
         })
         
     problem_json = {
