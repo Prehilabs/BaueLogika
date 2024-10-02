@@ -45,10 +45,7 @@ impl TestCase
         let stdout = process.stdout.as_mut().unwrap();
         let outputs = self.read_outputs(stdout).unwrap();
 
-        if !self.hidden
-        {
-            println!("Your outputs: [{}]", outputs);
-        }
+        println!("Your outputs: [{}]", outputs);
 
         self.passed = self.expected == outputs;
 
