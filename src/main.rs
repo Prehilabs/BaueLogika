@@ -4,15 +4,25 @@ mod problem;
 
 use problem::Problem;
 use std::collections::HashMap;
+use std::path::Path;
 
 fn main() 
 {
-    println!("Please enter the problem directory:");
-    let mut problem_directory = String::new();
-    std::io::stdin().read_line(&mut problem_directory).expect("Failed to read line");
-    let problem_directory = problem_directory.trim();
-    let mut problems = get_problems_from_directory(problem_directory);
-    print!("\x1B[2J\x1B[1;1H"); // Clear the screen
+    let mut problems;
+    loop {
+        println!("Please enter the problem directory:");
+        let mut problem_directory = String::new();
+        std::io::stdin().read_line(&mut problem_directory).expect("Failed to read line");
+        let problem_directory = problem_directory.trim();
+
+        if Path::new(problem_directory).exists() {
+            problems = get_problems_from_directory(problem_directory);
+            print!("\x1B[2J\x1B[1;1H"); // Clear the screen
+            break;
+        } else {
+            println!("The directory does not exist. Please try again.");
+        }
+    }
 
     loop
     {
@@ -31,6 +41,9 @@ fn main()
                 problem.set_path_to_exe(&get_exe_path());
                 print!("\x1B[2J\x1B[1;1H"); // Clear the screen
                 problem.run().unwrap();
+                println!("Press Enter to continue...");
+                std::io::stdin().read_line(&mut String::new()).expect("Failed to read line");
+                print!("\x1B[2J\x1B[1;1H"); // Clear the screen
             }
             
         } else {
@@ -52,7 +65,7 @@ fn print_menu(problem_map : &HashMap<String, Problem>)
 
 fn get_confirmation() -> bool
 {
-    println!("Do you want to run this problem? (y/n)");
+    println!("Do you want to try this problem? (y/n)");
     let mut confirmation = String::new();
     std::io::stdin().read_line(&mut confirmation).expect("Failed to read line");
     print!("\x1B[2J\x1B[1;1H"); // Clear the screen
@@ -75,10 +88,20 @@ fn get_users_option() -> usize
 
 fn get_exe_path() -> String
 {
-    println!("Please enter the path to the executable:");
-    let mut exe_path = String::new();
-    std::io::stdin().read_line(&mut exe_path).expect("Failed to read line");
-    return exe_path.trim().to_string();
+    loop {
+        println!("Please enter the path to the executable:");
+        let mut exe_path = String::new();
+        std::io::stdin().read_line(&mut exe_path).expect("Failed to read line");
+        let exe_path = exe_path.trim().to_string();
+
+        let path = Path::new(&exe_path);
+
+        if path.exists() && path.extension() == Some(std::ffi::OsStr::new("exe")) {
+            return exe_path;
+        } else {
+            println!("The path does not exist or is not an executable. Please try again.");
+        }
+    }
 }
 
 fn get_problems_from_directory(problem_directory : &str) -> HashMap<String, Problem>
@@ -88,9 +111,16 @@ fn get_problems_from_directory(problem_directory : &str) -> HashMap<String, Prob
     for path in paths
     {
         let path = path.unwrap().path();
-        let file_name = path.file_stem().unwrap().to_str().unwrap().to_string();
-        let problem = Problem::from_json_file(path.to_str().unwrap()).unwrap();
-        problems_map.insert(file_name, problem);
+        let file_name = path.file_stem().unwrap().to_str().unwrap().to_string().replace("_", "");
+        if path.extension() == Some(std::ffi::OsStr::new("json"))
+        {
+            let problem_result = Problem::from_json_file(path.to_str().unwrap());
+            if problem_result.is_ok()
+            {
+                problems_map.insert(file_name, problem_result.unwrap());
+            }
+            
+        }
     }
     return problems_map;
 }
