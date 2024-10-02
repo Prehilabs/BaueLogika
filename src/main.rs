@@ -111,7 +111,7 @@ fn get_problems_from_directory(problem_directory : &str) -> HashMap<String, Prob
     for path in paths
     {
         let path = path.unwrap().path();
-        let file_name = path.file_stem().unwrap().to_str().unwrap().to_string().replace("_", "");
+        let file_name = path.file_stem().unwrap().to_str().unwrap().to_string().replace("_", " ");
         if path.extension() == Some(std::ffi::OsStr::new("json"))
         {
             let problem_result = Problem::from_json_file(path.to_str().unwrap());
