@@ -47,6 +47,13 @@ pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : String
     config.save_in_dir(&config_path).unwrap();
 }
 
+pub fn get_problem_path(handler : tauri::AppHandle) -> String
+{
+    let config_path = handler.path_resolver().app_config_dir().unwrap_or_default();
+    let config = AppConfig::read_from_dir(&config_path);
+    return config.problem_path;
+}
+
 
 fn validate_dir(dir : &PathBuf)
 {
