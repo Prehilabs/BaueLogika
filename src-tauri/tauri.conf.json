@@ -29,8 +29,9 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "targets": "all"
+      "identifier": "com.prehilabs.bauelogika",
+      "publisher": "PrehiLabs",
+      "targets": "msi"
       },
     "security": {
       "csp": null
