@@ -3,6 +3,8 @@
 
 mod commands;
 mod utils;
+mod core;
+
 
 fn main() {
   tauri::Builder::default()
