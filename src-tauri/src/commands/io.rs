@@ -3,7 +3,7 @@ use tauri::api::dialog::FileDialogBuilder;
 use tauri::{AppHandle, Manager};
 use std::fs::read_dir;
 use crate::core::app_config::{update_problem_path, get_problem_path};
-use crate::core::problem::Problem;
+use crate::core::problem::{Problem, ProblemInfo};
 
 #[tauri::command]
 pub fn choose_directory(app_handle : AppHandle){
@@ -26,10 +26,10 @@ pub fn choose_directory(app_handle : AppHandle){
 }
 
 #[tauri::command]
-pub fn get_problems(app_handle : AppHandle) -> Result<Vec<Problem>, String> 
+pub fn get_problems_info(app_handle : AppHandle) -> Result<Vec<ProblemInfo>, String> 
 {
     let problem_dir = get_problem_path(app_handle);
-    let mut problems : Vec<Problem> = Vec::new();
+    let mut problems_info : Vec<ProblemInfo> = Vec::new();
     let dir_files = read_dir(problem_dir).map_err(|e| e.to_string())?;
     
     for file in dir_files
@@ -39,8 +39,8 @@ pub fn get_problems(app_handle : AppHandle) -> Result<Vec<Problem>, String>
         if file_path.is_file() && file_path.extension() == Some(std::ffi::OsStr::new("json"))
         {
             let problem = Problem::from_json_file(&file_path)?;
-            problems.push(problem);
+            problems_info.push(problem.get_info().clone());
         }
     }
-    return Ok(problems);
+    return Ok(problems_info);
 }

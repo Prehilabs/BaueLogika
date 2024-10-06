@@ -10,7 +10,7 @@ pub struct Problem
     test_cases : Vec<TestCase>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct ProblemInfo
 {
     name : String,

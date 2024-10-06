@@ -1,7 +1,7 @@
 const { invoke } = window.__TAURI__.tauri;
 
 //Code executed on page load
-invoke("get_problems").then((problems) => {
+invoke("get_problems_info").then((problems) => {
     makeCards(problems);
 });
 
@@ -20,13 +20,13 @@ function makeProblemCard(problem){
       <p class="problem-header">${problem.name}</p>
       <hr>
       <p class="problem-body">${problem.description}</p>
-      <button onclick=\"tryOutProblem('${problem.name}')\>Try it out! ></button>
+      <button onclick=\"tryOutProblem()\">Try it out! ></button>
     </div>
     `;
     return html;
 }
 
-function tryOutProblem(problem)
+function tryOutProblem()
 {
     window.location.href = "problemInfo.html";
 }
