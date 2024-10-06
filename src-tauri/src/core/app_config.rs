@@ -33,7 +33,7 @@ impl AppConfig
         let json_str = to_string(self).unwrap();
         let mut file = File::create(config_path)?;
         file.write_all(json_str.as_bytes())?;
-        Ok(())
+        return Ok(())
     }
 }
 
@@ -61,6 +61,4 @@ fn validate_dir(dir : &PathBuf)
     {
         std::fs::create_dir_all(&dir).unwrap();
     }
-
-    println!("Config directory: {:?}", dir);
 }
