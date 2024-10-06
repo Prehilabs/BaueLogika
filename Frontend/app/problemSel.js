@@ -14,13 +14,13 @@ function makeCards(problems){
     }
 }
 
-
 function makeProblemCard(problem){
     const html = `
     <div class="problem-card">
-      <h3>${problem.name}</h3>
-      <p>${problem.description}</p>
-      <button>Try out! ></button>
+      <p class="problem-header">${problem.name}</p>
+      <hr>
+      <p class="problem-body">${problem.description}</p>
+      <button>Try it out! ></button>
     </div>
     `;
     return html;
