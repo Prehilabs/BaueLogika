@@ -20,8 +20,13 @@ function makeProblemCard(problem){
       <p class="problem-header">${problem.name}</p>
       <hr>
       <p class="problem-body">${problem.description}</p>
-      <button>Try it out! ></button>
+      <button onclick=\"tryOutProblem('${problem.name}')\>Try it out! ></button>
     </div>
     `;
     return html;
-  }
+}
+
+function tryOutProblem(problem)
+{
+    window.location.href = "problemInfo.html";
+}
