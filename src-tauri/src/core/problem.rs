@@ -1,10 +1,17 @@
 
 use std::path::PathBuf;
-
+use crate::core::test_case::TestCase;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Problem
+{
+    info : ProblemInfo,
+    test_cases : Vec<TestCase>
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ProblemInfo
 {
     name : String,
     description : String,
@@ -19,12 +26,8 @@ impl Problem
         Ok(problem)
     }
 
-    pub fn print_info(&self)
+    pub fn get_info(&self) -> &ProblemInfo
     {
-        println!("{} Problem", self.name);
-        println!("Description:\n{}", self.description);
-        println!("Example:");
-        println!("Input:\n{}\n", self.example_case[0]);
-        println!("Expected output:\n{}\n", self.example_case[1]);
+        return &self.info;
     }
 }
