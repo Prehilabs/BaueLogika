@@ -13,8 +13,7 @@ pub fn choose_directory(app_handle : AppHandle){
         if sel_path.is_some() 
         {
             let selected_path = sel_path.unwrap();
-            let selected_path_str = selected_path.to_str().unwrap().to_string();
-            update_problem_path(app_handle, selected_path_str);
+            update_problem_path(app_handle, selected_path);
             //Go to the problem selection page
             let window = app_handle_clone.get_window("main");
             if window.is_some()

@@ -1,8 +1,12 @@
 const { invoke } = window.__TAURI__.tauri;
 
 //Code executed on page load
-invoke("get_problems_info").then((problems) => {
+invoke("get_problems_info")
+.then((problems) => {
     makeCards(problems);
+})
+.exception((error) => {
+    console.error(error);
 });
 
 function makeCards(problems){

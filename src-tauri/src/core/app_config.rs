@@ -6,7 +6,7 @@ use serde_json::to_string;
 
 #[derive(Serialize, Deserialize)]
 struct AppConfig {
-    problem_path : String
+    problem_path : PathBuf
 }
 
 impl AppConfig 
@@ -14,7 +14,7 @@ impl AppConfig
     pub fn new() -> Self
     {
         return AppConfig {
-            problem_path : String::new()
+            problem_path : PathBuf::new()
         };
     }
 
@@ -37,7 +37,7 @@ impl AppConfig
     }
 }
 
-pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : String)
+pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : PathBuf)
 {
     let config_path = handler.path_resolver().app_config_dir().unwrap_or_default();
 
@@ -47,7 +47,7 @@ pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : String
     config.save_in_dir(&config_path).unwrap();
 }
 
-pub fn get_problem_path(handler : tauri::AppHandle) -> String
+pub fn get_problem_path(handler : tauri::AppHandle) -> PathBuf
 {
     let config_path = handler.path_resolver().app_config_dir().unwrap_or_default();
     let config = AppConfig::read_from_dir(&config_path);
