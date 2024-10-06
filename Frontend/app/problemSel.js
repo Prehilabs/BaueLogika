@@ -5,8 +5,9 @@ invoke("get_problems_info")
 .then((problems) => {
     makeCards(problems);
 })
-.exception((error) => {
-    console.error(error);
+.catch( () => {
+    invoke("show_error", {message: "Failed to get problems info"});
+    window.location.href = "index.html"; 
 });
 
 function makeCards(problems){

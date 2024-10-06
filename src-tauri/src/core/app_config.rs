@@ -18,14 +18,15 @@ impl AppConfig
         };
     }
 
-    pub fn read_from_dir(dir : &PathBuf) -> Self {
+    pub fn read_from_dir(dir : &PathBuf) -> std::io::Result<Self> {
         let config_path = dir.join("app.conf");
+        let mut app_config = AppConfig::new();
         if config_path.exists() {
-            let file = File::open(config_path).unwrap();
-            serde_json::from_reader(file).unwrap()
-        } else {
-            AppConfig::new()
+            let file = File::open(config_path)?;
+            app_config = serde_json::from_reader(file)?;
         }
+
+        return Ok(app_config);
     }
 
     pub fn save_in_dir(&self, dir : &PathBuf) -> std::io::Result<()> {
@@ -37,28 +38,31 @@ impl AppConfig
     }
 }
 
-pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : PathBuf)
+pub fn update_problem_path(handler : tauri::AppHandle, new_problem_path : &PathBuf) -> std::io::Result<()>
 {
     let config_path = handler.path_resolver().app_config_dir().unwrap_or_default();
 
-    validate_dir(&config_path);
-    let mut config = AppConfig::read_from_dir(&config_path);
-    config.problem_path = new_problem_path;
-    config.save_in_dir(&config_path).unwrap();
+    validate_dir(&config_path)?;
+    let mut config = AppConfig::read_from_dir(&config_path)?;
+    config.problem_path = new_problem_path.clone();
+    config.save_in_dir(&config_path)?;
+    return Ok(())
 }
 
-pub fn get_problem_path(handler : tauri::AppHandle) -> PathBuf
+pub fn get_problem_path(handler : tauri::AppHandle) -> std::io::Result<PathBuf>
 {
     let config_path = handler.path_resolver().app_config_dir().unwrap_or_default();
-    let config = AppConfig::read_from_dir(&config_path);
-    return config.problem_path;
+    let config = AppConfig::read_from_dir(&config_path)?;
+    return Ok(config.problem_path);
 }
 
 
-fn validate_dir(dir : &PathBuf)
+fn validate_dir(dir : &PathBuf) -> std::io::Result<()>
 {
     if !dir.exists()
     {
-        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::create_dir_all(&dir)?;
     }
+
+    return Ok(())
 }
