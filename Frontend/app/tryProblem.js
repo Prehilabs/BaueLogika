@@ -10,6 +10,10 @@ window.onload = function() {
         document.getElementById("example").innerHTML += makeExampleDiv(problem.info.example_case);
         addTestCases(problem.test_cases);
     })
+    .catch((e) => {
+        invoke("show_error", {message: e});
+        window.location.href = "problemSel.html";
+    });
 };
 
 function makeExampleDiv(example)
