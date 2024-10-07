@@ -6,8 +6,11 @@ invoke("get_problems_info")
     makeCards(problems);
 })
 .catch( () => {
-    invoke("show_error", {message: "Failed to get problems info"});
-    window.location.href = "index.html"; 
+    const error_html =`
+    <p>No problems found in the problem path</p>
+    <button onclick=\"window.location.href = 'index.html'\">Go back</button>
+    `;
+    document.body.innerHTML = error_html; 
 });
 
 function makeCards(problems){
@@ -31,7 +34,7 @@ function makeProblemCard(problem){
     return html;
 }
 
-function tryOutProblem()
+function tryOutProblem(problemName)
 {
-    window.location.href = "problemInfo.html";
+    window.location.href = "problemInfo.html?problem=" + problemName;
 }

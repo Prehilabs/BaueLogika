@@ -1,2 +1,2 @@
-pub mod problem_load;
+pub mod problem_cmds;
 pub mod reactions;

@@ -5,6 +5,7 @@ use std::fs::read_dir;
 use crate::core::app_config::{update_problem_path, get_problem_path};
 use crate::core::problem::{Problem, ProblemInfo};
 use crate::utils::alert_sys::log_error;
+use crate::utils::validation::problem_path_is_valid;
 
 #[tauri::command]
 pub fn choose_directory(app_handle : AppHandle){
@@ -16,12 +17,10 @@ pub fn choose_directory(app_handle : AppHandle){
             let selected_path = &sel_path.unwrap();
             
             //Verify permissions for the selected directory
-            match read_dir(selected_path) {
-                Err(e) => {
-                    log_error(&format!("{}", e));
-                    return;
-                },
-                _ => {}
+            if !problem_path_is_valid(selected_path)
+            {
+                log_error("Invalid problem path");
+                return;
             }
 
             //Show error message if updating the problem path failed
@@ -46,17 +45,32 @@ pub fn choose_directory(app_handle : AppHandle){
 pub fn get_problems_info(app_handle : AppHandle) -> Result<Vec<ProblemInfo>, String> 
 {
     let problem_dir = get_problem_path(app_handle).map_err(|e| e.to_string())?;
-    let mut problems_info : Vec<ProblemInfo> = Vec::new();
-    let dir_files = read_dir(problem_dir).map_err(|e| e.to_string())?;
+
+    //Dont require validation as the path is already validated
+    let dir_files = read_dir(problem_dir).unwrap();
     
+    let mut problems_info : Vec<ProblemInfo> = Vec::new();
+
     for file in dir_files
     {
         let file_path = file.map_err(|e| e.to_string())?.path();
         if file_path.is_file() && file_path.extension() == Some(std::ffi::OsStr::new("json"))
         {
-            let problem = Problem::from_json_file(&file_path)?;
-            problems_info.push(problem.get_info().clone());
+            //Only add the problem info if the problem is successfully deserialized
+            let problem = Problem::from_json_file(&file_path);
+            if problem.is_ok()
+            {
+                problems_info.push(problem.unwrap().get_info().clone());
+            }
         }
     }
-    return Ok(problems_info);
+
+    if problems_info.is_empty()
+    {
+        return Err("No problems found".to_string());
+    }
+    else 
+    {
+        return Ok(problems_info);     
+    }
 }

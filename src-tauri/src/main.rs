@@ -9,7 +9,7 @@ use commands::*;
 
 fn main() {
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![problem_load::choose_directory, problem_load::get_problems_info, reactions::show_error])
+    .invoke_handler(tauri::generate_handler![problem_cmds::choose_directory, problem_cmds::get_problems_info, reactions::show_error])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
