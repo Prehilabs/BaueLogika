@@ -74,3 +74,13 @@ pub fn get_problems_info(app_handle : AppHandle) -> Result<Vec<ProblemInfo>, Str
         return Ok(problems_info);     
     }
 }
+
+#[tauri::command]
+pub fn load_problem(app_handle : AppHandle, problem_name : String) -> Result<Problem, String>
+{
+    let problem_dir = get_problem_path(app_handle).map_err(|e| e.to_string())?;
+    let problem_path = problem_dir.join(format!("{}.json", problem_name.replace(" ", "_")));
+    let problem = Problem::from_json_file(&problem_path).map_err(|e| e.to_string())?;
+
+    return Ok(problem);
+}
