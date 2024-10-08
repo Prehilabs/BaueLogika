@@ -4,8 +4,9 @@ use tauri::{AppHandle, Manager};
 use std::fs::read_dir;
 use crate::core::app_config::{update_problem_path, get_problem_path};
 use crate::core::problem::{Problem, ProblemInfo};
+use crate::core::test_case::TestCase;
 use crate::utils::alert_sys::log_error;
-use crate::utils::validation::problem_path_is_valid;
+use crate::utils::validation::{problem_path_is_valid, exe_path_is_valid};
 
 #[tauri::command]
 pub fn choose_directory(app_handle : AppHandle){
@@ -83,4 +84,18 @@ pub fn load_problem(app_handle : AppHandle, problem_name : String) -> Result<Pro
     let problem = Problem::from_json_file(&problem_path).map_err(|e| e.to_string())?;
 
     return Ok(problem);
+}
+
+#[tauri::command]
+pub fn run_problem(problem: String, exe_path : String, test_cases : Vec<TestCase>)
+{
+    if exe_path_is_valid(&exe_path.into())
+    {
+        //Run the problem
+    }
+    else
+    {
+        log_error("Invalid exe path");
+    }
+    
 }

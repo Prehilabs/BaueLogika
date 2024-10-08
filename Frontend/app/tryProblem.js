@@ -1,20 +1,27 @@
 const {invoke} = window.__TAURI__.tauri;
+const {listen} = window.__TAURI__.event;
+const dropArea = document.getElementById("drop-area");
+var problem_obj = null;
 
 window.onload = function() {
     var queryParams = new URLSearchParams(window.location.search);
     var problemName = queryParams.get("problem");
     invoke("load_problem", {problemName: problemName})
     .then((problem) => {
+        problem_obj = problem;
         document.getElementById("problem-title").innerHTML = problem.info.name;
         document.getElementById("problem-description").innerHTML = problem.info.description;
         document.getElementById("example").innerHTML += makeExampleDiv(problem.info.example_case);
-        addTestCases(problem.test_cases);
     })
     .catch((e) => {
         invoke("show_error", {message: e});
         window.location.href = "problemSel.html";
     });
 };
+
+listen('tauri://file-drop', event => {
+  invoke("run_problem", {problem: problem_obj.info.name, exePath: event.payload[0], testCases: problem_obj.test_cases});
+})
 
 function makeExampleDiv(example)
 {
