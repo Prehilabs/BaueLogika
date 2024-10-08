@@ -45,10 +45,14 @@ function addTestCases(testCases)
 function makeVisibleTestCase(testCase, index)
 {
     const html = `
-    <div class="test-case">
-        <p class="test-case-tittle">Test case ${index}</p>
-        <p>Input: ${testCase.inputs}</p>
-        <p>Output: ${testCase.expected}</p>
+    <div class="visible-test-case">
+        <div class="test-case-text">
+            <p>Input: ${testCase.inputs}</p>
+            <p>Output: ${testCase.expected}</p>
+        </div>
+        <div class="test-case-title">
+            <p>Test case ${index}</p>
+        </div>
     </div>
     `;
     return html;
@@ -57,9 +61,13 @@ function makeVisibleTestCase(testCase, index)
 function makeHiddenTestCase(index)
 {
     const html = `
-    <div class="test-case">
-        <p class="test-case-tittle">Test case ${index}</p>
-        <p class="test-case-text">Information hidden</p>
+    <div class="hidden-test-case">
+        <div class="test-case-title">
+            <p>Test case ${index}</p>
+        </div>
+        <div class="test-case-text">
+            <p>HIDDEN</p>
+        </div>
     </div>
     `;
     return html;
